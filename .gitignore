@@ -5,3 +5,4 @@ __pycache__/
 data/
 deep_equation/data/
 deep_equation/Desafio MNIST.ipynb
+deep_equation/src/deep_equation/create_json.py
