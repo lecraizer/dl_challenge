@@ -1,4 +1,5 @@
-.ipynb_checkpoints/
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
 data/
 deep_equation/data/
 deep_equation/Desafio MNIST.ipynb
