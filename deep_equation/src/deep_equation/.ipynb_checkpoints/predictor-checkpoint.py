@@ -1,9 +1,11 @@
 """
 Predictor interfaces for the Deep Learning challenge.
 """
-
+import json
+import torch
 from typing import List
 import numpy as np
+from deep_equation.src.deep_equation.model import CNN
 
 
 class BaseNet:
@@ -70,6 +72,8 @@ class RandomModel(BaseNet):
         
         return predictions
 
+    
+from torchvision import transforms
 
 class StudentModel(BaseNet):
     """
@@ -79,13 +83,17 @@ class StudentModel(BaseNet):
     """
 
     # TODO
-    def load_model(self, model_path: str):
+    def load_model(self, model_path='/data/lecraizer/dl_challenge/deep_equation/input/model_20epochs.pth'):
         """
         Load the student's trained model.
         TODO: update the default `model_path` 
               to be the correct path for your best model!
         """
-        pass
+
+        cnn = CNN()
+        cnn.load_state_dict(torch.load(model_path))
+
+        return cnn
     
     # TODO:
     def predict(
@@ -95,6 +103,45 @@ class StudentModel(BaseNet):
         """Implement this method to perform predictions 
         given a list of images_a, images_b and operators.
         """
+        with open('deep_equation/src/deep_equation/labels_dict.json', 'r') as fp:
+            mapping_dict = json.loads(fp.read())
+            
+        with open('deep_equation/src/deep_equation/inv_labels_dict.json', 'r') as fp:
+            inv_labels_dict = json.loads(fp.read())
+        
+        symbols = ['+', '-', '*', '/']
+        op_dict = {'+': [1, 0, 0, 0], '-': [0, 1, 0, 0], '*': [0, 0, 1, 0], '/': [0, 0, 0, 1]}
+        
+        cnn = self.load_model()
+        
         predictions = []
+        for i in range(len(images_a)):
+            img1 = images_a[i]
+            img2 = images_b[i]
+            op = operators[i]
+            img_to_tensor = transforms.Compose([
+                transforms.Resize((32, 32)), 
+                transforms.Grayscale(), 
+                transforms.ToTensor(),
+            ])
+
+            a = img_to_tensor(img1)
+            b = img_to_tensor(img2)
+
+            T = torch.stack((a, b))
+
+            v = op_dict[op]
+            V = torch.tensor([1*[32*[8*v]]])
+
+            T = torch.cat((T, V), 0) 
+            T = T.permute(1, 0, 2, 3)
+
+            cnn.eval()
+            with torch.no_grad():
+                test_output, last_layer = cnn(T)            
+                pred_y = torch.max(test_output, 1)[1].data.squeeze().item()
+                result = inv_labels_dict[str(pred_y)]
+
+            predictions.append(float(result))
         
         return predictions

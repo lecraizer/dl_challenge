@@ -1,13 +1,13 @@
 import unittest
 from PIL import Image
-from deep_equation import predictor
+from deep_equation.src.deep_equation import predictor
 
 
 class TestRandomModel(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.digit_a = Image.open('resources/digit_a.png')
-        self.digit_b = Image.open('resources/digit_b.png')
+        self.digit_a = Image.open('deep_equation/resources/digit_a.png')
+        self.digit_b = Image.open('deep_equation/resources/digit_b.png')
 
         self.input_imgs_a = [
             self.digit_a, self.digit_a, self.digit_b, self.digit_b, self.digit_a]
@@ -63,3 +63,6 @@ class TestRandomModel(unittest.TestCase):
         for out in output:
             self.assertGreaterEqual(out, -10)
             self.assertLessEqual(out, 100)
+        
+        # Comparing expected result classes
+#         self.assertEqual([67.00, 51.00, 82.00, 37.00, 88.00], output)

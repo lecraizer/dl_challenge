@@ -1,21 +1,11 @@
-import math
 import torch
-import random
-
-from torch import optim
-from torch.utils.data import DataLoader
-from torch.optim import lr_scheduler
-from torch.autograd import Variable
-from torch.nn import functional as F
-import torch.nn as nn
-
-import torchvision
-import torchvision.transforms.functional as F
 from torchvision import datasets, models, transforms
-from torchvision import datasets
-from torchvision.transforms import ToTensor
 
-
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+        
+    
 class DataLoader:
     def __init__(self):
         ''' 
@@ -31,6 +21,12 @@ class DataLoader:
         transformation=transforms.Compose([
             transforms.Resize((32, 32)),
             transforms.ToTensor(),
+            transforms.RandomInvert(p=0.5),
+            transforms.GaussianBlur(kernel_size=(9, 9), sigma=(0.1, 2.5)),
+            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.7, hue=0.5),
+            transforms.RandomAdjustSharpness(sharpness_factor=0.1, p=0.5),
+            transforms.RandomAutocontrast(p=0.5),
+            transforms.RandomResizedCrop(size=(32, 32), scale=(0.7, 1.0)),
         ])
 
 
@@ -75,11 +71,6 @@ class DataLoader:
         Generate examples of the input data
         '''
         train_data = self.load_mnist()[0]
-
-        import matplotlib
-        matplotlib.use('Agg')
-        import matplotlib.pyplot as plt
-
 
         figure = plt.figure(figsize=(10, 8))
         cols, rows = 5, 5
