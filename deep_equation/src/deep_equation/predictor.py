@@ -5,6 +5,7 @@ import json
 import torch
 from typing import List
 import numpy as np
+from torchvision import transforms
 from deep_equation.src.deep_equation.model import CNN
 
 
@@ -73,8 +74,6 @@ class RandomModel(BaseNet):
         return predictions
 
     
-from torchvision import transforms
-
 class StudentModel(BaseNet):
     """
     TODO: THIS is the class you have to implement:
@@ -144,4 +143,5 @@ class StudentModel(BaseNet):
 
             predictions.append(float(result))
         
+        print(predictions)
         return predictions
