@@ -6,7 +6,7 @@ import torch
 from typing import List
 import numpy as np
 from torchvision import transforms
-from deep_equation.src.deep_equation.model import CNN
+from deep_equation.model import CNN
 
 
 class BaseNet:
