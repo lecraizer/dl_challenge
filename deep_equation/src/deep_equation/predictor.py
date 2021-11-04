@@ -82,7 +82,7 @@ class StudentModel(BaseNet):
     """
 
     # TODO
-    def load_model(self, model_path='/data/lecraizer/dl_challenge/deep_equation/input/model_20epochs.pth'):
+    def load_model(self, model_path='deep_equation/input/model_20epochs.pth'):
         """
         Load the student's trained model.
         TODO: update the default `model_path` 

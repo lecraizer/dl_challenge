@@ -25,7 +25,7 @@ class Train:
         self.loss_func = nn.CrossEntropyLoss()
         self.optimizer = optim.Adam(cnn.parameters(), lr = 0.001)
         self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=5, gamma=0.5)
-        self.num_epochs = 20
+        self.num_epochs = 30
         self.labels_dict = mapping_dict
 
         
